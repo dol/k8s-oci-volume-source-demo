@@ -1,0 +1,5 @@
+kind/
+*.tar.gz
+opentelemetry-javaagent/
+spring-redis-websocket/git-source/
+*.oci.tar
