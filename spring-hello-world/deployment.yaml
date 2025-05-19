@@ -1,0 +1,65 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-hello-world
+  labels:
+    app: spring-hello-world
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-hello-world
+  template:
+    metadata:
+      labels:
+        app: spring-hello-world
+    spec:
+      containers:
+        - name: spring-hello-world
+          image: mcr.microsoft.com/azurespringapps/samples/hello-world:0.0.1
+          ports:
+            - name: http
+              protocol: TCP
+              containerPort: 1025
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: "-javaagent:/mnt/javaagent/opentelemetry-javaagent.jar"
+            - name: OTEL_SERVICE_NAME
+              value: "spring-hello-world"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://aspire-otlp:4317"
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: "grpc"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          volumeMounts:
+            - name: otel-agent
+              mountPath: /mnt/javaagent
+              readOnly: true
+      volumes:
+        - name: otel-agent
+          image:
+            reference: localhost:5001/opentelemetry-javaagent:v2.15.0

@@ -1,0 +1,7 @@
+---
+namespace: spring-hello-world
+
+resources:
+  - namespace.yaml
+  - deployment.yaml
+  - service.yaml

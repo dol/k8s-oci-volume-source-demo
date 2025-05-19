@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aspire-dashboard-ui
+  labels:
+    app: aspire-dashboard
+spec:
+  type: NodePort
+  ports:
+    - port: 18888
+      targetPort: "dashboard"
+      nodePort: 31888
+  selector:
+    app: aspire-dashboard
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aspire-otlp
+  labels:
+    app: aspire-dashboard
+spec:
+  type: ClusterIP
+  ports:
+    - port: 4317
+      targetPort: "otlp"
+  selector:
+    app: aspire-dashboard
