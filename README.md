@@ -10,7 +10,7 @@ This demo specifically showcases using the OCI Volume Source feature to deliver 
 
 ## Key Components
 
-- **Custom Kind Cluster**: Modified to run with Kubernetes 1.33 and an enabled `ImageVolume` feature flag
+- **Kind Cluster**: Uses Kind 0.29+ with Kubernetes 1.33 and containerd v2.1.1 that natively supports Image Volumes
 - **Local Registry**: A local container registry for storing and retrieving our OCI artifacts
 - **OpenTelemetry Java Agent**: Packaged into a single OCI layer and pushed to the registry
 - **Spring Boot Demo Applications**: Example applications that mount the OpenTelemetry agent from the OCI image
@@ -18,9 +18,9 @@ This demo specifically showcases using the OCI Volume Source feature to deliver 
 
 ## Implementation Details
 
-### Custom Setup Requirements
+### Setup Requirements
 
-- A custom Kind base image was needed since the standard Kind images don't include a containerd version that supports OCI Volume Source
+- Kind 0.29+ is required (includes containerd v2.1.1 with native Image Volume support)
 - Feature flags for `ImageVolume` are enabled in the Kubernetes cluster
 
 ### Workflow
@@ -37,74 +37,58 @@ This project includes several shell scripts that automate the setup and demonstr
 
 ### Setup Scripts
 
-#### `01-build-custom-kind-image.sh`
+#### `01-kind-with-registry.sh`
 
-Builds a custom Kind node image with containerd v2.1.0-rc.0 that supports OCI Volume Source.
-
-```bash
-./01-build-custom-kind-image.sh
-```
-
-#### `02-kind-with-registry.sh`
-
-Creates a Kind cluster with a local container registry, using the custom image and enabling the required feature flags.
+Creates a Kind cluster with a local container registry, using Kubernetes 1.33 with Image Volume support enabled.
 
 ```bash
-./02-kind-with-registry.sh
+./01-kind-with-registry.sh
 ```
 
-#### `02a-kubernetes-dashboard.sh` (Optional)
+#### `01a-kubernetes-dashboard.sh` (Optional)
 
 Deploys the Kubernetes Dashboard for better cluster visibility.
 
 ```bash
-./02a-kubernetes-dashboard.sh
+./01a-kubernetes-dashboard.sh
 ```
 
 ### OCI Artifact Creation Script
 
-#### `03-artifact-javaagent-upload.sh`
+#### `02-artifact-javaagent-upload.sh`
 
 Packages the OpenTelemetry Java agent as an OCI artifact and pushes it to the local registry, creating a reproducible OCI image with precise metadata.
 
 ```bash
-./03-artifact-javaagent-upload.sh
+./02-artifact-javaagent-upload.sh
 ```
 
 ### Deployment Scripts
 
-#### `04-deploy-spring-hello-world.sh`
+#### `03-deploy-spring-hello-world.sh`
 
 Deploys a simple Spring Boot application with OCI Volume Source-based instrumentation.
 
 ```bash
-./04-deploy-spring-hello-world.sh
+./03-deploy-spring-hello-world.sh
 ```
 
-#### `04a-deploy-aspire-dashboard.sh`
+#### `03a-deploy-aspire-dashboard.sh`
 
 Deploys the Aspire Dashboard for visualizing telemetry data from the Spring applications.
 
 ```bash
-./04a-deploy-aspire-dashboard.sh
-```
-
-#### `deploy-spring-redis-websocket.sh` (Alternative)
-
-Deploys a more complex Spring Boot application with Redis and WebSocket support.
-
-```bash
-./deploy-spring-redis-websocket.sh
+./03a-deploy-aspire-dashboard.sh
 ```
 
 ### Cleanup Script
 
-#### `05-cleanup.sh`
+#### `04-cleanup.sh`
 
 Removes all created resources when you're done with the demo.
 
 ```bash
-./05-cleanup.sh
+./04-cleanup.sh
 ```
 
 ## Benefits
