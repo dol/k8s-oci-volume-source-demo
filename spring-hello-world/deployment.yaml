@@ -62,4 +62,4 @@ spec:
       volumes:
         - name: otel-agent
           image:
-            reference: localhost:5001/opentelemetry-javaagent:v2.15.0
+            reference: localhost:5001/opentelemetry-javaagent:v2.16.0

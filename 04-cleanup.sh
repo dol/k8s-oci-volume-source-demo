@@ -13,15 +13,11 @@ ARTIFACT_NAME="opentelemetry-javaagent"
 
 # Step 1: Delete any running kind clusters
 echo "Deleting kind clusters..."
-if command -v kind &> /dev/null; then
-  if kind get clusters | grep -q .; then
-    kind delete clusters --all
-    echo "All kind clusters deleted"
-  else
-    echo "No kind clusters found"
-  fi
+if kind get clusters -q | grep -q -F image-volumes-demo; then
+  kind delete cluster --name image-volumes-demo
+  echo "kind cluster 'image-volumes-demo' deleted"
 else
-  echo "kind command not found, skipping cluster deletion"
+  echo "No kind clusters found"
 fi
 
 # Step 2: Remove downloaded files
@@ -66,12 +62,6 @@ fi
 # Step 6: Clean up related Docker images
 echo "Cleaning up related Docker images..."
 
-# Custom kind images
-if docker images "kindest/node:latest" | grep -q "kindest/node"; then
-  echo "Removing kindest/node image..."
-  docker rmi kindest/node:latest || true
-fi
-
 # Registry image
 if docker images "registry:3" | grep -q "registry"; then
   echo "Removing registry:3 image..."
@@ -91,9 +81,9 @@ if docker images "${ARTIFACT_NAME}.oci:v1" | grep -q "${ARTIFACT_NAME}.oci"; the
 fi
 
 # OpenTelemetry agent image in local registry
-if docker images "localhost:5001/opentelemetry-javaagent:v2.15.0" | grep -q "opentelemetry-javaagent"; then
+if docker images "localhost:5001/opentelemetry-javaagent:v2.16.0" | grep -q "opentelemetry-javaagent"; then
   echo "Removing opentelemetry-javaagent image..."
-  docker rmi localhost:5001/opentelemetry-javaagent:v2.15.0 || true
+  docker rmi localhost:5001/opentelemetry-javaagent:v2.16.0 || true
 fi
 
 # Spring Redis WebSocket images if they exist
