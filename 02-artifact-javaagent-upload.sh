@@ -6,7 +6,7 @@ TMP_DIR="$(mktemp -d)"
 
 # Constants
 GITHUB_REPO="open-telemetry/opentelemetry-java-instrumentation"
-AGENT_VERSION="v2.15.0"
+AGENT_VERSION="v2.16.0"
 AGENT_URL="https://github.com/${GITHUB_REPO}/releases/download/${AGENT_VERSION}/opentelemetry-javaagent.jar"
 AGENT_JAR_FILE="opentelemetry-javaagent.jar"
 AGENT_DIR="${TMP_DIR}/opentelemetry-javaagent"

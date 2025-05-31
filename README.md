@@ -4,7 +4,7 @@ This project demonstrates the new OCI Volume Source capabilities in Kubernetes, 
 
 ## Overview
 
-The OCI Volume Source feature (introduced in Kubernetes 1.31, alpha) simplifies how applications can access static data resources such as instrumentation agents, ML models, or other data patterns to be shared across your Kubernetes clusters.
+The OCI Volume Source feature (introduced in Kubernetes 1.31 as alpha, graduated to beta in Kubernetes 1.33) simplifies how applications can access static data resources such as instrumentation agents, ML models, or other data patterns to be shared across your Kubernetes clusters.
 
 This demo specifically showcases using the OCI Volume Source feature to deliver the OpenTelemetry Java agent to a Spring Boot application without embedding it in the application container image.
 
@@ -107,47 +107,6 @@ Removes all created resources when you're done with the demo.
 ./05-cleanup.sh
 ```
 
-### Recommended Usage Flow
-
-For a complete demonstration of the OCI Volume Source feature:
-
-1. Build the custom Kind image:
-   ```bash
-   ./01-build-custom-kind-image.sh
-   ```
-
-2. Create a Kind cluster with a local registry:
-   ```bash
-   ./02-kind-with-registry.sh
-   ```
-
-3. (Optional) Deploy the Kubernetes Dashboard:
-   ```bash
-   ./02a-kubernetes-dashboard.sh
-   ```
-
-4. Package and push the OpenTelemetry agent:
-   ```bash
-   ./03-artifact-javaagent-upload.sh
-   ```
-
-5. Deploy the demo application:
-   ```bash
-   ./04-deploy-spring-hello-world.sh
-   ```
-
-6. Deploy the Aspire Dashboard for telemetry visualization:
-   ```bash
-   ./04a-deploy-aspire-dashboard.sh
-   ```
-
-7. Access the application and Aspire dashboard using the URLs printed at the end of deployment
-
-8. Clean up when done:
-   ```bash
-   ./05-cleanup.sh
-   ```
-
 ## Benefits
 
 - Simplified agent distribution without modifying application images
@@ -157,5 +116,7 @@ For a complete demonstration of the OCI Volume Source feature:
 
 ## References
 
-For more details on OCI Volume Source, see the article:
-[Using OCI Volume Source in Kubernetes Pods](https://sestegra.medium.com/using-oci-volume-source-in-kubernetes-pods-06d62fb72086)
+For more details on OCI Volume Source, see these articles:
+
+- [Kubernetes v1.33: Image Volumes graduate to beta!](https://kubernetes.io/blog/2025/04/29/kubernetes-v1-33-image-volume-beta/) - Official Kubernetes blog post
+- [Using OCI Volume Source in Kubernetes Pods](https://sestegra.medium.com/using-oci-volume-source-in-kubernetes-pods-06d62fb72086) - Medium article
