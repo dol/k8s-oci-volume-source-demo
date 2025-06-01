@@ -27,15 +27,28 @@ This demo specifically showcases using the OCI Volume Source feature to deliver 
 
 1. The Kind cluster is started with the required features enabled
 2. The OpenTelemetry Java agent is packaged as an OCI artifact and pushed to the local registry
-3. Spring Boot applications are deployed with references to the OpenTelemetry agent OCI image
-4. The agent is automatically mounted into the containers at runtime
-5. Telemetry data is sent to the Aspire dashboard for visualization
+3. The Aspire Dashboard is deployed first to act as the OpenTelemetry collector endpoint
+4. Spring Boot applications are deployed with references to the OpenTelemetry agent OCI image
+5. The agent is automatically mounted into the containers at runtime
+6. Telemetry data is automatically sent to the pre-deployed Aspire dashboard for visualization
 
 ## Shell Scripts Guide
 
-This project includes several shell scripts that automate the setup and demonstration of the OCI Volume Source feature:
+This project includes several shell scripts that automate the setup and demonstration of the OCI Volume Source feature. The scripts should be executed in the following order to ensure proper dependency setup:
 
-### Setup Scripts
+### Quick Start
+
+To run the complete demo in one command:
+
+```bash
+./01-kind-with-registry.sh && \
+./01a-kubernetes-dashboard.sh && \
+./02-artifact-javaagent-upload.sh && \
+./03-deploy-aspire-dashboard.sh && \
+./04-deploy-spring-hello-world.sh
+```
+
+### Step-by-Step Execution
 
 #### `01-kind-with-registry.sh`
 
@@ -53,8 +66,6 @@ Deploys the Kubernetes Dashboard for better cluster visibility.
 ./01a-kubernetes-dashboard.sh
 ```
 
-### OCI Artifact Creation Script
-
 #### `02-artifact-javaagent-upload.sh`
 
 Packages the OpenTelemetry Java agent as an OCI artifact and pushes it to the local registry, creating a reproducible OCI image with precise metadata.
@@ -63,32 +74,30 @@ Packages the OpenTelemetry Java agent as an OCI artifact and pushes it to the lo
 ./02-artifact-javaagent-upload.sh
 ```
 
-### Deployment Scripts
+#### `03-deploy-aspire-dashboard.sh`
 
-#### `03-deploy-spring-hello-world.sh`
-
-Deploys a simple Spring Boot application with OCI Volume Source-based instrumentation.
+Deploys the Aspire Dashboard for visualizing telemetry data. **This must be deployed before the Spring applications** as it acts as the OpenTelemetry collector endpoint.
 
 ```bash
-./03-deploy-spring-hello-world.sh
+./03-deploy-aspire-dashboard.sh
 ```
 
-#### `03a-deploy-aspire-dashboard.sh`
+#### `04-deploy-spring-hello-world.sh`
 
-Deploys the Aspire Dashboard for visualizing telemetry data from the Spring applications.
+Deploys a simple Spring Boot application with OCI Volume Source-based instrumentation. The application will automatically send telemetry data to the Aspire Dashboard deployed in the previous step.
 
 ```bash
-./03a-deploy-aspire-dashboard.sh
+./04-deploy-spring-hello-world.sh
 ```
 
 ### Cleanup Script
 
-#### `04-cleanup.sh`
+#### `05-cleanup.sh`
 
 Removes all created resources when you're done with the demo.
 
 ```bash
-./04-cleanup.sh
+./05-cleanup.sh
 ```
 
 ## Benefits

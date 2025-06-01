@@ -28,7 +28,7 @@ spec:
             - name: OTEL_SERVICE_NAME
               value: "spring-hello-world"
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "http://aspire-otlp:4317"
+              value: "http://aspire-otlp.aspire-dashboard:4317"
             - name: OTEL_EXPORTER_OTLP_PROTOCOL
               value: "grpc"
           resources:
